@@ -58,18 +58,25 @@ public class ApplicationClass extends Application {
             }
         }));
 
+        /*Listen for a custom URL Scheme as opposed to an App Link*/
         OneSignal.getInAppMessages().addClickListener(new IInAppMessageClickListener() {
             @Override
             public void onClick(@Nullable IInAppMessageClickEvent event) {
                 String link = event.getResult().getActionId();
-                Log.d("OneSignalAppcode", link);
+                if(link != null){
+                    Log.d("DeepLinkCheck", "URL Value: " + link);
+                    Uri deepLinkValue = Uri.parse(link);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, deepLinkValue);
+                    // Add this flag to start the activity in a new task or if the activity is outside your app context
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
 
         OneSignal.getNotifications().addClickListener(result ->
         {
             JSONObject addtlData = result.getNotification().getAdditionalData();
-
             if(addtlData != null && addtlData.has("url")){
                 try {
                     String urlValue = addtlData.getString("url");

@@ -25,6 +25,7 @@
             android:name=".SecondActivity"
             android:exported="true">
             <!-- auto verify will make an https request to check the validity of your deep link-->
+            <!--Remove this if using a custom Scheme and sending as additional data-->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
